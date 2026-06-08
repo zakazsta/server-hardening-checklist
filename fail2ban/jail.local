@@ -1,0 +1,21 @@
+# /etc/fail2ban/jail.local
+[DEFAULT]
+bantime  = 1h
+findtime = 10m
+maxretry = 5
+backend  = systemd
+# Never ban yourself — add your admin IPs:
+ignoreip = 127.0.0.1/8 ::1
+
+[sshd]
+enabled = true
+
+# Generic web auth/abuse jail. Point logpath at your access log and pair with the
+# filter below (saved as /etc/fail2ban/filter.d/web-abuse.conf).
+[web-abuse]
+enabled  = true
+port     = http,https
+logpath  = /var/log/caddy/access.log
+maxretry = 20
+findtime = 1m
+bantime  = 2h
