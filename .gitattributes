@@ -1,0 +1,3 @@
+*.conf linguist-language=INI
+*.snippet linguist-language=Caddyfile linguist-detectable=true
+fail2ban/* linguist-language=INI
