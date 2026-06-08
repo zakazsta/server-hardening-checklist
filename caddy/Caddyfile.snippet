@@ -1,0 +1,26 @@
+# Caddy: security headers + rate limiting (needs the caddy-ratelimit plugin for the limiter)
+# Drop these into your site block.
+
+example.com {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	# Rate-limit auth + form endpoints (plugin: github.com/mholt/caddy-ratelimit)
+	rate_limit {
+		zone auth {
+			match {
+				path /login /api/auth/*
+			}
+			key {remote_host}
+			events 10
+			window 1m
+		}
+	}
+
+	reverse_proxy 127.0.0.1:8080
+}
